@@ -17,12 +17,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
         ]);
 
-        // сидер для таблиц бд если нужно
-        // DB::table('categories')->insert([
-        //     ['title' => 'рисунок'],
-        //     ['title' => 'акварель'],
-        //     ['title' => 'гуашь'],
-        //     ['title' => 'другое'],
-        // ]);
+        DB::table('statuses')->insert([
+            ['title' => 'Новая'],
+            ['title' => 'В процессе'],
+            ['title' => 'Завершена'],
+            ['title' => 'Отменена'],
+        ]);
     }
 }

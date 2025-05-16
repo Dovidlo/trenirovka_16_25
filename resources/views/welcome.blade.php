@@ -893,7 +893,7 @@
                 ServerName dummy-host2.example.com ## <- мусор
             </VirtualHost>
             3. запустить проект (apache, mysql, php artisan serve, npm run build (!!!)
-            4. перезагрузить нахер xamp
+            4. перезагрузить xamp
             5. скинуть свой ip
             --}}
         </div>

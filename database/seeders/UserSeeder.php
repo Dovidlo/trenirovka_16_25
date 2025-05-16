@@ -17,11 +17,11 @@ class UserSeeder extends Seeder
         User::insert(
             [
                 [
-                    'name' => 'admin',
+                    'firstname' => 'admin',
                     'middlename' => null,
                     'lastname' => null,
-                    'login' => 'adminka',
-                    'password' => Hash::make('password'),
+                    'login' => 'administrator',
+                    'password' => Hash::make('administrator'),
                     'tel' => '+70000000000',
                     'email' => 'admin@gmail.com',
                     'role'=>'admin'

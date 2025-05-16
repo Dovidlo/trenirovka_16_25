@@ -8,29 +8,30 @@
       </a>
       <div class='cards flex flex-wrap gap-4'>
         @foreach($reports as $report)
-        <div class='div-col border bg-gray-200 rounded-md p-6 mt-4 w-80'>
-          <p class="text-xl text-black font-semibold">{{$report->user->fullName()}}</p>
-          <p class="text-sm text-gray-500">{{\Carbon\Carbon::parse($report->created_at)->translatedFormat('j F Y')}}</p>
-          <span class='text-xl font-semibold	'>{{$report->title}}</span>
-          <p class='text-blue-500'>{{$report->description}}</p>
-          @isset($report->path_img)
-          <img src="/images/{{$report->path_img}}" alt="" class='rounded-lg mt-2'>
-          @endisset
-          @if($report->status=="Новая")
+        <div class='div-col border border-gray-500  rounded-lg p-6 mt-4 w-80'>
+          <p class="text-sm text-gray-500">Время подачи заявки: {{\Carbon\Carbon::parse($report->created_at)->translatedFormat('j F Y')}}</p>
+          <span class='text-xl font-semibold	'>Адрес: {{$report->adress}}</span>
+          <p class='text-l font-semibold	'>Вид ремонта: {{$report->type}}</p>
+          <p class='text-l font-semibold	'>Дата: {{$report->date}}, Время: {{$report->time}}</p>
+          <p class='text-l font-semibold	'>Способ оплаты: {{$report->payment}}</p>
+         
+
+          @if($report->status->title=="Новая")
           <form id="form-update-{{$report->id}}" action="{{route('reports.update')}}" method="POST">
             <div>
               @csrf
               @method('PUT')
               <input type="hidden" name="id" value="{{$report->id}}">
-              <select name="status" onchange="document.getElementById('form-update-{{$report->id}}').submit()" class="border-none rounded-xl bg-green-300 mt-3 font-medium">
-                <option value='Новая'>Новая</option>
-                <option value='Одобрена'>Одобрена</option>
-                <option value='Отменена'>Отменена</option>
+              <select name="status_id" onchange="document.getElementById('form-update-{{$report->status_id}}').submit()" class="border-none rounded-xl bg-green-300 mt-3 font-medium">
+                <option value='1'>Новая</option>
+                <option value='2'>В процессе</option>
+                <option value='3'>Завершена</option>
+                <option value='4'>Отменена</option>
               </select>
             </div>
           </form>
           @else
-          <p id="statusColor" class='statusColor font-medium text-s bg-gray-300 pt-2 pb-2 pl-5 pr-5 rounded-xl	mt-3 w-min border-none'>{{$report->status}}</p>
+          <p id="statusColor" class='statusColor font-medium text-s bg-gray-300 pt-2 pb-2 pl-5 pr-5 rounded-xl	mt-3 w-min border-none'>{{$report->status->title}}</p>
           @endif
         </div>
         @endforeach

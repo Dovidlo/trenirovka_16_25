@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
+use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
@@ -16,7 +17,8 @@ class ReportController extends Controller
     public function index() {
         $reports = Report::where('user_id', Auth::user()->id)->get();
         $userId = Auth::id();
-        return view('reports.index', compact('reports', 'userId'));
+        $statuses = Status::all();
+        return view('reports.index', compact('reports', 'userId', 'statuses'));
     }
 
     public function create() {
@@ -25,25 +27,23 @@ class ReportController extends Controller
     }
 
     public function store(Request $request): RedirectResponse {
-        // if (Report::where('user_id', Auth::id())->exists()) {
-        //     return redirect()->back()->withErrors(['report' => 'Вы уже создали заявку.']);
-        // } ПРОВЕРКА УНИКАЛЬНОСТИ
 
         $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'path_img' => 'image|mimes:png,jpg,jpeg,gif|max:800',
+            'date' => ['required', 'date', 'max:255'],
+            'time' => ['required', 'date_format:H:i', 'max:255'],
+            'type' => ['required', 'string', 'max:255'],
+            'payment' => ['required', 'string', 'max:255'],
+            'adress' => ['required', 'string', 'max:255'],
         ]);
 
-        $imageName = time() . '.' . $request['path_img']->extension();
-        $request['path_img']->move(public_path('images'), $imageName);
-
         Report::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'path_img' => $imageName,
+            'date' => $request->date,
+            'time' => $request->time,
+            'type' => $request->type,
+            'payment' => $request->payment,
+            'adress' => $request->adress,
             "user_id" => Auth::user()->id,
-            "status" => "Новая",
+            "status_id" => "1",
         ]);
 
         return redirect()->route('dashboard');
@@ -51,25 +51,13 @@ class ReportController extends Controller
 
     public function update(Request $request) {
         $request->validate([
-            'status' => ['required'],
+            'status_id' => ['required'],
             'id' => ['required']
         ]);
 
         Report::where('id', $request->id)->update([
-            'status' => $request->status,
+            'status_id' => $request->status_id,
         ]);
         return redirect()->back();
     }
 }
-
-// ПРИМЕР
-
-// $request->validate([
-//     'title' => ['required', 'string', 'max:255'],
-//     'category_id' => 'required|exists:categories,id',
-//     'path_img' => 'image|mimes:png,jpg,jpeg,gif|max:800',
-// ]);
-// Report::create([
-//     "user_id" => Auth::user()->id,
-//     'category_id' => $request->category_id,
-// ]);
